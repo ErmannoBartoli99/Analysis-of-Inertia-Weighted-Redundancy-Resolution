@@ -1,0 +1,12 @@
+Primo esperimento: 
+    eseguito su una traiettoria lineare con inizio [1.3660; 2.3660] e fine [2.5000; 0]
+    abbiamo provato diversi valori di k, che sono mostrati nel nome della cartella
+    i guadagni sono: Kp = diag([100,100]) e Kd = diag([20,20]);
+    è presente la gravità (come mostrato nel nome della cartella)
+    abbiamo provato diversi valori di k (sia positivi che negativi) sia in presenza di gravità che in assenza,
+    in generale abbiamo notato che i valori negativi sono preferibili dal punto di vista delle tua (rimangono più basse e più smorzate), mentre i valori maggiori di K
+    provocano una crescita smisurata delle tau, continue riconfigurazioni e la traiettoria non viene quasi mai seguita, è un continuo tentare di riavvicinarsi in corsia
+    Mentre per valori negativi di k questo fenomeno non è presente, la traiettoria è spesso seguita per intero, tuttatvia con valori troppo negativi (-20) nonostante
+    le tau siano tenute basse la traiettoria non è più seguita. In generale l'assenza di gravita ha diversi vantaggi: valori di tau più contenuti e traiettorie seguite
+    meglio.
+    
