@@ -1,9 +1,15 @@
 robot = rigidBodyTree('DataFormat', 'column', 'MaxNumBodies', 3);
 
+q1 = simulation.q1.signals.values;
+q2 = simulation.q2.signals.values;
+q3 = simulation.q3.signals.values;
+
+%% Drawing the robot
+
 L1 = 1;
 L2 = 1;
 L3 = 1;
-
+    
 % Adding the link 1
 body = rigidBody('link1');
 joint = rigidBodyJoint('joint1', 'revolute');
@@ -47,35 +53,48 @@ for i = 1:robot.NumBodies -1
    mat(1,4) = L1/2;
    collisionObj.Pose =mat;
    addCollision(robot.Bodies{i},collisionObj);
+   
 end
 
-%Declaring the inverse kinematics function
-weights = [0, 0, 0, 1, 1, 0];
-endEffector = 'tool';
+qs = [q1 q2 q3];
+count = length(qs(:,1));
+disp(count);
 
-% Pre-allocate configuration solutions as a matrix |qs|.
-qInitial = homeConfiguration(robot);
+%% Defining the linear trajectory for the display
+% t = (0:0.2:10)'; % Time
+% start = [cos(pi/6) + cos(2*pi/6) + cos(3*pi/6); sin(pi/6) + sin(2*pi/6) + sin(3*pi/6)];
+% finish = [2.5; 0];
+% disp(start);
+% disp(finish);
+% points = [start finish];
 
-q1 = simulation.q1.signals.values;
-q2 = simulation.q2.signals.values;
-q3 = simulation.q3.signals.values;
-disp(q1);
-% figure
-% show(robot,qs(1,:)','Collisions','on','Visuals','off');
-% view(2)
-% ax = gca;
-% ax.Projection = 'orthographic';
-% hold on
-% plot(r(:,1),r(:,2),'k')
-% axis([-2 3 -2 3])
-% 
-% framesPerSecond = 15;
-% r = rateControl(framesPerSecond);
-% for i = 1:count
-%     show(robot,qs(i,:)','Collisions','on','Visuals','off','PreservePlot',false);
-%     drawnow
-%     waitfor(r);
-% end
+%% Defining the circular trajectory for the display
+t = (0:0.2:10)'; % Time
+center = [1.5 1 0];
+radius = 0.5;
+theta = t*(2*pi/t(end));
+points = center + radius*[cos(theta) sin(theta) zeros(size(theta))];
+
+
+figure
+show(robot,qs(1,:)','Collisions','on','Visuals','off');
+view(2)
+ax = gca;
+ax.Projection = 'orthographic';
+hold on
+% plot(points(1,:),points(2,:),'k') %this is only for the linear trajectory
+plot(points(:,1),points(:,2),'k')
+axis([-2 3 -2 3])
+
+pause;
+
+framesPerSecond = 15;
+r = rateControl(framesPerSecond);
+for i = 1:40:count
+    show(robot,qs(i,:)','Collisions','on','Visuals','off','PreservePlot',false);
+    drawnow
+    waitfor(r);
+end
 
 
 
